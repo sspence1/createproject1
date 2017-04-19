@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 function validPounds(x) {
 var length = x.length;
     if (length <= 3) {
@@ -17,4 +15,3 @@ function calculate() {
         var y = document.getElementById("second").value;
            result = x/y;
         alert(result)}
->>>>>>> origin/master
