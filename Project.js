@@ -1,5 +1,11 @@
-function pounds(x) {
-
+function validPounds(x) {
+var length = x.length;
+    if (length <= 3) {
+        return true
+    }
+    else {
+        return false
+    }
 }
 
 
