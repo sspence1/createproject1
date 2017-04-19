@@ -1,0 +1,38 @@
+    var question = <Question>survey.pages[0].addNewQuestion("text", "question");
+    assert.equal(survey.getComment("question"), "", "Comment is empty");
+    assert.equal(question.comment, "", "Comment is empty");
+
+    question.comment = "myComment";
+    assert.equal(survey.getComment("question"), "myComment", "set comment from question");
+    assert.equal(question.comment, "myComment", "set comment from question");
+
+    survey.setComment("question", "myNewComment");
+    assert.equal(survey.getComment("question"), "myNewComment", "set comment from survey");
+    assert.equal(question.comment, "myNewComment", "set comment from survey");
+});
+QUnit.test("Should set required questions before go on the  next page or finish", function (assert) {
+    var survey = twoPageSimplestSurvey();
+    assert.notEqual(survey, null, "Survey is not  null");
+    (<Question>survey.pages[0].questions[0]).isRequired = true;
+
+    assert.equal(survey.nextPage(), false, "Can not go to the next page");
+    assert.equal(survey.pages[0].questions[0].hasErrors(), true, "The question is not filled out.");
+    assert.equal(survey.pages[0].hasErrors(), true, "The page is not filled out.");
+
+    (<Question>survey.pages[0].questions[0]).value = "Test";
+
+    assert.equal(survey.nextPage(), true, "Can go to the next page");
+    assert.equal(survey.pages[0].questions[0].hasErrors(), false, "The question is filled out.");
+    assert.equal(survey.pages[0].hasErrors(), false, "The page is filled out.");
+});
+QUnit.test("Should not be errors after prevPage bug#151", function (assert) {
+    var survey = new SurveyModel();
+    survey.goNextPageAutomatic = true;
+    var page = survey.addNewPage("page1");
+    var question = <QuestionDropdownModel>page.addNewQuestion("dropdown", "q1");
+    question.choices = [1, 2, 3];
+    question.isRequired = true;
+    page = survey.addNewPage("page2");
+    page.addNewQuestion("text", "q2");
+
+    var errorsChangedCounter = 0;
